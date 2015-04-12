@@ -1,0 +1,16 @@
+/nbproject/
+/build.xml
+/build
+/hotel_reservation_system-ejb/nbproject/
+/hotel_reservation_system-war/nbproject/
+/hotel_reservation_system-ejb/dist/
+/hotel_reservation_system-ejb/build/
+/hotel_reservation_system-ejb/build.xml
+/hotel_reservation_system-war/build/
+/hotel_reservation_system-war/build.xml
+/hotel_reservation_system-ejb/setup/glassfish-resources.xml
+
+/hotel_reservation_system-remote/nbproject/
+/hotel_reservation_system-remote/build.xml
+/hotel_reservation_system-remote/build/
+/hotel_reservation_system-war/dist/
