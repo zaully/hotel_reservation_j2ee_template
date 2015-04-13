@@ -24,45 +24,13 @@
             </div>
             <div class="col-sm-5 col-md-4">
                 <ul class="nav nav-pills">
-                    <li role="presentation" class="active"><a href="#index_register_tab" data-toggle="pill">Register</a></li>
-                    <li role="presentation"><a href="#index_login_tab" data-toggle="pill">Login</a></li>
+                    <li role="presentation"><a href="#index_register_tab" data-toggle="pill">Register</a></li>
+                    <li role="presentation" class="active"><a href="#index_login_tab" data-toggle="pill">Login</a></li>
                 </ul>
                 <div id="index-tab-content" class="tab-content">
                     <br />
-                    <div class="tab-pane active" id="index_register_tab">
-                        <form role="form" class="wowload fadeInRight">
-                            <div class="form-group">
-                                <input type="email" class="form-control"  placeholder="Email (will be your username)">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control"  placeholder="Name">
-                            </div>
-                            <div class="form-group">
-                                <input type="Phone" class="form-control"  placeholder="Phone">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control"  placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control"  placeholder="Confirm your password">
-                            </div>
-                            <div class="form-group">
-                                <textarea class="form-control" placeholder="Your preference" rows="3"></textarea>
-                            </div>
-                            <button class="btn btn-default">Submit</button>
-                        </form>
-                    </div>
-                    <div class="tab-pane" id="index_login_tab">
-                        <form class="wowload fadeInRight">
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="email" />
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" placeholder="password" />
-                            </div>
-                            <button class="btn btn-default">Login</button>
-                        </form>
-                    </div>
+                    <%@include file="register-form.jsp" %>
+                    <%@include file="login-form.jsp" %>
                 </div>
             </div>
         </div>  

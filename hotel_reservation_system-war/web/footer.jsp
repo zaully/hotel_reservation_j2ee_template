@@ -5,12 +5,12 @@
 <footer class="spacer">
         <div class="container">
             <div class="row">
-                <div class="col-sm-5">
+                <div class="col-sm-5 col-sm-offset-6">
                     <h4>Holiday Crowley</h4>
-                    <p>Holiday Crowley was these three and songs arose whose. Of in vicinity contempt together in possible branched. Assured company hastily looking garrets in oh. Most have love my gone to this so. Discovered interested prosperous the our affronting insipidity day. Missed lovers way one vanity wishes nay but. Use shy seemed within twenty wished old few regret passed. Absolute one hastened mrs any sensible. </p>
+                    <p>As the biggest and the most luxury hotel in Toronto, Hotel Crowley offers incredible experience, only for you.</p>
                 </div>              
                  
-                 <div class="col-sm-3">
+<!--                 <div class="col-sm-3">
                     <h4>Quick Links</h4>
                     <ul class="list-unstyled">
                         <li><a href="rooms-tariff.jsp">Rooms & Tariff</a></li>        
@@ -36,7 +36,7 @@
                     <a href="#"><i class="fa fa-tumblr-square" data-toggle="tooltip" data-placement="top" data-original-title="tumblr"></i></a>
                     <a href="#"><i class="fa fa-youtube-square" data-toggle="tooltip" data-placement="top" data-original-title="youtube"></i></a>
                     </div>
-                </div>
+                </div>-->
             </div>
             <!--/.row--> 
         </div>

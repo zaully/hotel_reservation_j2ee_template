@@ -7,9 +7,7 @@ package ejb;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,12 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,11 +30,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RoomType.findAll", query = "SELECT r FROM RoomType r"),
+    @NamedQuery(name = "RoomType.countRoomTypes", query="SELECT COUNT(r) FROM RoomType r"),
     @NamedQuery(name = "RoomType.findByRoomTypeId", query = "SELECT r FROM RoomType r WHERE r.roomTypeId = :roomTypeId"),
     @NamedQuery(name = "RoomType.findByRoomTypeName", query = "SELECT r FROM RoomType r WHERE r.roomTypeName = :roomTypeName"),
     @NamedQuery(name = "RoomType.findByRoomSize", query = "SELECT r FROM RoomType r WHERE r.roomSize = :roomSize"),
     @NamedQuery(name = "RoomType.findByRoomPrice", query = "SELECT r FROM RoomType r WHERE r.roomPrice = :roomPrice"),
-    @NamedQuery(name = "RoomType.findByActivated", query = "SELECT r FROM RoomType r WHERE r.activated = :activated")})
+    @NamedQuery(name = "RoomType.findByActivated", query = "SELECT r FROM RoomType r WHERE r.activated = :activated"),
+    @NamedQuery(name = "RoomType.findByQuantity", query = "SELECT r FROM RoomType r WHERE r.quantity = :quantity")})
 public class RoomType implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -70,10 +68,10 @@ public class RoomType implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "room_description")
     private String roomDescription;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomTypeId")
-    private Collection<Reservation> reservationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomTypeId")
-    private Collection<RoomAmenity> roomAmenityCollection;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "quantity")
+    private int quantity;
 
     public RoomType() {
     }
@@ -82,13 +80,14 @@ public class RoomType implements Serializable {
         this.roomTypeId = roomTypeId;
     }
 
-    public RoomType(Integer roomTypeId, String roomTypeName, BigDecimal roomSize, BigDecimal roomPrice, boolean activated, String roomDescription) {
+    public RoomType(Integer roomTypeId, String roomTypeName, BigDecimal roomSize, BigDecimal roomPrice, boolean activated, String roomDescription, int quantity) {
         this.roomTypeId = roomTypeId;
         this.roomTypeName = roomTypeName;
         this.roomSize = roomSize;
         this.roomPrice = roomPrice;
         this.activated = activated;
         this.roomDescription = roomDescription;
+        this.quantity = quantity;
     }
 
     public Integer getRoomTypeId() {
@@ -139,22 +138,12 @@ public class RoomType implements Serializable {
         this.roomDescription = roomDescription;
     }
 
-    @XmlTransient
-    public Collection<Reservation> getReservationCollection() {
-        return reservationCollection;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setReservationCollection(Collection<Reservation> reservationCollection) {
-        this.reservationCollection = reservationCollection;
-    }
-
-    @XmlTransient
-    public Collection<RoomAmenity> getRoomAmenityCollection() {
-        return roomAmenityCollection;
-    }
-
-    public void setRoomAmenityCollection(Collection<RoomAmenity> roomAmenityCollection) {
-        this.roomAmenityCollection = roomAmenityCollection;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @Override

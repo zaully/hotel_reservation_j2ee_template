@@ -1,6 +1,6 @@
 <%@include file="header.jsp" %>
 <div class="container">
-    <h1 class="title">Profile and Settings</h1>
+    <h1 class="title">User Details</h1>
     <div class="row">
         <div class="login col-md-2">
             <ul class="nav nav-pills nav-stacked">

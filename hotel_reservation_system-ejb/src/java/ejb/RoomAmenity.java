@@ -12,11 +12,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,7 +27,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RoomAmenity.findAll", query = "SELECT r FROM RoomAmenity r"),
-    @NamedQuery(name = "RoomAmenity.findByRoomAmenityId", query = "SELECT r FROM RoomAmenity r WHERE r.roomAmenityId = :roomAmenityId")})
+    @NamedQuery(name = "RoomAmenity.findByRoomAmenityId", query = "SELECT r FROM RoomAmenity r WHERE r.roomAmenityId = :roomAmenityId"),
+    @NamedQuery(name = "RoomAmenity.removeByRoomTypeId", query = "delete from RoomAmenity r WHERE r.roomTypeId = :roomTypeId"),
+    @NamedQuery(name = "RoomAmenity.findByAmenityId", query = "SELECT r FROM RoomAmenity r WHERE r.amenityId = :amenityId"),
+    @NamedQuery(name = "RoomAmenity.findByRoomTypeId", query = "SELECT r FROM RoomAmenity r WHERE r.roomTypeId = :roomTypeId")})
 public class RoomAmenity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,18 +38,26 @@ public class RoomAmenity implements Serializable {
     @Basic(optional = false)
     @Column(name = "room_amenity_id")
     private Integer roomAmenityId;
-    @JoinColumn(name = "amenity_id", referencedColumnName = "amenity_id")
-    @ManyToOne(optional = false)
-    private Amenity amenityId;
-    @JoinColumn(name = "room_type_id", referencedColumnName = "room_type_id")
-    @ManyToOne(optional = false)
-    private RoomType roomTypeId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "amenity_id")
+    private int amenityId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "room_type_id")
+    private int roomTypeId;
 
     public RoomAmenity() {
     }
 
     public RoomAmenity(Integer roomAmenityId) {
         this.roomAmenityId = roomAmenityId;
+    }
+
+    public RoomAmenity(Integer roomAmenityId, int amenityId, int roomTypeId) {
+        this.roomAmenityId = roomAmenityId;
+        this.amenityId = amenityId;
+        this.roomTypeId = roomTypeId;
     }
 
     public Integer getRoomAmenityId() {
@@ -58,19 +68,19 @@ public class RoomAmenity implements Serializable {
         this.roomAmenityId = roomAmenityId;
     }
 
-    public Amenity getAmenityId() {
+    public int getAmenityId() {
         return amenityId;
     }
 
-    public void setAmenityId(Amenity amenityId) {
+    public void setAmenityId(int amenityId) {
         this.amenityId = amenityId;
     }
 
-    public RoomType getRoomTypeId() {
+    public int getRoomTypeId() {
         return roomTypeId;
     }
 
-    public void setRoomTypeId(RoomType roomTypeId) {
+    public void setRoomTypeId(int roomTypeId) {
         this.roomTypeId = roomTypeId;
     }
 

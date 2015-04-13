@@ -13,9 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -34,7 +32,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Reservation.findAll", query = "SELECT r FROM Reservation r"),
+    @NamedQuery(name = "Reservation.countReservations", query="SELECT COUNT(r) FROM Reservation r"),
+    @NamedQuery(name = "Reservation.findAllWithRange", query = "SELECT r FROM Reservation r where r.startsFrom <= :endsAt and r.endsAt >= :startsFrom"),
+    @NamedQuery(name = "Reservation.countReservationsWithRange", query="SELECT COUNT(r) FROM Reservation r where r.startsFrom <= :endsAt and r.endsAt >= :startsFrom"),
     @NamedQuery(name = "Reservation.findByReservationId", query = "SELECT r FROM Reservation r WHERE r.reservationId = :reservationId"),
+    @NamedQuery(name = "Reservation.findByUserId", query = "SELECT r FROM Reservation r WHERE r.userId = :userId"),
+    @NamedQuery(name = "Reservation.findByRoomTypeId", query = "SELECT r FROM Reservation r WHERE r.roomTypeId = :roomTypeId"),
     @NamedQuery(name = "Reservation.findByStartsFrom", query = "SELECT r FROM Reservation r WHERE r.startsFrom = :startsFrom"),
     @NamedQuery(name = "Reservation.findByEndsAt", query = "SELECT r FROM Reservation r WHERE r.endsAt = :endsAt"),
     @NamedQuery(name = "Reservation.findByRoomsQuantity", query = "SELECT r FROM Reservation r WHERE r.roomsQuantity = :roomsQuantity")})
@@ -45,6 +48,14 @@ public class Reservation implements Serializable {
     @Basic(optional = false)
     @Column(name = "reservation_id")
     private Integer reservationId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "user_id")
+    private int userId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "room_type_id")
+    private int roomTypeId;
     @Basic(optional = false)
     @NotNull
     @Column(name = "starts_from")
@@ -65,12 +76,6 @@ public class Reservation implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "additional_message")
     private String additionalMessage;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    @ManyToOne(optional = false)
-    private User userId;
-    @JoinColumn(name = "room_type_id", referencedColumnName = "room_type_id")
-    @ManyToOne(optional = false)
-    private RoomType roomTypeId;
 
     public Reservation() {
     }
@@ -79,8 +84,10 @@ public class Reservation implements Serializable {
         this.reservationId = reservationId;
     }
 
-    public Reservation(Integer reservationId, Date startsFrom, Date endsAt, int roomsQuantity, String additionalMessage) {
+    public Reservation(Integer reservationId, int userId, int roomTypeId, Date startsFrom, Date endsAt, int roomsQuantity, String additionalMessage) {
         this.reservationId = reservationId;
+        this.userId = userId;
+        this.roomTypeId = roomTypeId;
         this.startsFrom = startsFrom;
         this.endsAt = endsAt;
         this.roomsQuantity = roomsQuantity;
@@ -93,6 +100,22 @@ public class Reservation implements Serializable {
 
     public void setReservationId(Integer reservationId) {
         this.reservationId = reservationId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getRoomTypeId() {
+        return roomTypeId;
+    }
+
+    public void setRoomTypeId(int roomTypeId) {
+        this.roomTypeId = roomTypeId;
     }
 
     public Date getStartsFrom() {
@@ -125,22 +148,6 @@ public class Reservation implements Serializable {
 
     public void setAdditionalMessage(String additionalMessage) {
         this.additionalMessage = additionalMessage;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
-    public RoomType getRoomTypeId() {
-        return roomTypeId;
-    }
-
-    public void setRoomTypeId(RoomType roomTypeId) {
-        this.roomTypeId = roomTypeId;
     }
 
     @Override

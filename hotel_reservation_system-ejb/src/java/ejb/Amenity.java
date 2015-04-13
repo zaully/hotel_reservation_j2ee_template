@@ -6,9 +6,7 @@
 package ejb;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,12 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,6 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Amenity.findAll", query = "SELECT a FROM Amenity a"),
+    @NamedQuery(name = "Amenity.countAmenities", query="SELECT COUNT(a) FROM Amenity a"),
     @NamedQuery(name = "Amenity.findByAmenityId", query = "SELECT a FROM Amenity a WHERE a.amenityId = :amenityId"),
     @NamedQuery(name = "Amenity.findByAmenityName", query = "SELECT a FROM Amenity a WHERE a.amenityName = :amenityName")})
 public class Amenity implements Serializable {
@@ -53,8 +50,6 @@ public class Amenity implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "amenity_description")
     private String amenityDescription;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "amenityId")
-    private Collection<RoomAmenity> roomAmenityCollection;
 
     public Amenity() {
     }
@@ -91,15 +86,6 @@ public class Amenity implements Serializable {
 
     public void setAmenityDescription(String amenityDescription) {
         this.amenityDescription = amenityDescription;
-    }
-
-    @XmlTransient
-    public Collection<RoomAmenity> getRoomAmenityCollection() {
-        return roomAmenityCollection;
-    }
-
-    public void setRoomAmenityCollection(Collection<RoomAmenity> roomAmenityCollection) {
-        this.roomAmenityCollection = roomAmenityCollection;
     }
 
     @Override

@@ -1,4 +1,3 @@
-
                             <form role="form" class="wowload fadeInRight">
                                 <div class="form-group">
                                     <input type="text" class="form-control"  placeholder="Name">
