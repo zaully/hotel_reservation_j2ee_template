@@ -165,12 +165,15 @@ public class ReservationSessionBean implements ReservationSessionBeanRemote, Res
     @Override
     public Date getLastVisitByUserID(int uid) {
         try {
-            Reservation reservation = (Reservation)em.createQuery("SELECT r FROM Reservation r WHERE r.userId = :userId and r.startsFrom <= :endsAt ORDER BY r.startsFrom DESC").setParameter("userId", uid).setParameter("endsAt", Calendar.getInstance().getTime()).getSingleResult();
-            if (reservation != null) {
-                return reservation.getStartsFrom();
-            }   
+            List reservations = em.createQuery("SELECT r FROM Reservation r WHERE r.userId = :userId and r.startsFrom <= :endsAt ORDER BY r.startsFrom DESC").setParameter("userId", uid).setParameter("endsAt", Calendar.getInstance().getTime()).getResultList();
+            if (reservations.size() > 0) {
+                Reservation reservation = (Reservation)reservations.get(0);
+                if (reservation != null) {
+                    return reservation.getStartsFrom();
+                }
+            }
         } catch (Exception e) {
-            
+            e.printStackTrace();
         }
         return null;
     }
