@@ -114,8 +114,8 @@
                             <td><%= df.format(reservation.getEndsAt()) %></td>
                             <td><%= rt.getRoomTypeName() %></td>
                             <td><%= reservation.getRoomsQuantity() %></td>
-                            <td><a href="book-room.jsp" class='btn-sm'>Modify</td>
-                            <td><a href="" class='btn-sm btn-danger'>Cancel</td>
+                            <td><a href="book-room.jsp?res=<%= reservation.getReservationId() %>" class='btn-sm'>Modify</td>
+                            <td><a href="delete-reservation?rid=<%= reservation.getReservationId() %>" class='btn-sm btn-danger'>Cancel</td>
                         </tr>
                                 <%
                             }

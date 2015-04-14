@@ -39,5 +39,7 @@ public interface ReservationSessionBeanRemote {
     int getVisitsByUserID(int uid);
 
     Boolean reserve(int rid, int uid, Date from, Date to, int quantity, String additional_message);
+
+    Boolean saveReservation(int res, Date from, Date to, int quantity, String additional_message);
     
 }

@@ -203,4 +203,14 @@ public class ReservationSessionBean implements ReservationSessionBeanRemote, Res
         em.flush();
         return true;
     }
+
+    @Override
+    public Boolean saveReservation(int res, Date from, Date to, int quantity, String additional_message) {
+        Reservation reservation = (Reservation)em.find(Reservation.class, res);
+        reservation.setStartsFrom(from);
+        reservation.setEndsAt(to);
+        reservation.setAdditionalMessage(additional_message);
+        reservation.setRoomsQuantity(quantity);
+        return this.saveChange(reservation);
+    }
 }
