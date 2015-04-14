@@ -43,7 +43,7 @@
                             <th></th>
                         </tr>
                         <%
-                            List amenityObjs = as.getAllAmenities(2, 2 * (pageIndex - 1));
+                            List amenityObjs = as.getAllAmenities(10, 10 * (pageIndex - 1));
                             for (Object amenityObj : amenityObjs) {
                                 Amenity amenity = (Amenity)amenityObj;
                                 %>
@@ -66,7 +66,10 @@
                         <li><a <%= pageIndex != 1 ? "href='amenity-management.jsp?p=1'" : "" %> ><</a></li>
                             <%
                             int totalRecordCount = as.getTotalCount();
-                            int totalPageCount = totalRecordCount / 2 + 1;
+                            int totalPageCount = totalRecordCount / 10 + 1;
+                            if (totalRecordCount % 10 == 0) {
+                                totalPageCount -= 1;
+                            }
                             for (int i = 0; i < totalPageCount; i++) {
                                 if (pageIndex == i + 1) {
                                     %> <li class='active'><a><%= i + 1 %><span class='sr-only'>(current)</span></a></li> <%

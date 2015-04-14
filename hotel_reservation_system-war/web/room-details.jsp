@@ -49,7 +49,7 @@
                 <div class="size-price">Price<span>$<%= room.getRoomPrice()%></span></div>
             </div>
         </div>
-        <% if (ub.getUserRoleID() == 0) {%>
+        <% if (ub.getUserRoleID() == 0 && roomBean.isAvailable(room.getRoomTypeId()) ) {%>
         <a href="book-room.jsp?rid=<%= room.getRoomTypeId()%>" class='pull-right btn-xlg btn-default'>Book it</a><br /><br />
         <% } %>
     </div>

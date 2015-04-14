@@ -30,10 +30,14 @@ public interface ReservationSessionBeanRemote {
 
     List getAllReservation(int count, int skip, Date start, Date end);
     
+    List getAllReservation(int uid, int rid, int count, int skip, Date start, Date end);
+    
     public int getTotalCount(Date start, Date end);
 
     Date getLastVisitByUserID(int uid);
 
     int getVisitsByUserID(int uid);
+
+    Boolean reserve(int rid, int uid, Date from, Date to, int quantity, String additional_message);
     
 }

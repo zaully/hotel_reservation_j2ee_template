@@ -23,6 +23,11 @@
                     <h3><%= room.getRoomTypeName()%></h3>
                     <p><%= room.getRoomDescription()%></p>
                     <a href="room-details.jsp?rid=<%= room.getRoomTypeId()%>" class="btn btn-default">Check Details</a>
+                    <% if (roomBean.isAvailable(room.getRoomTypeId())) { %>
+                    <a href="book-room.jsp?rid=<%= room.getRoomTypeId()%>" class='pull-right btn btn-success'>Available ($<%= room.getRoomPrice() %>)</a>
+                    <% } else { %>
+                    <a class='pull-right btn btn-warning'>Full</a>
+                    <% } %>
                 </div>
             </div>
         </div>

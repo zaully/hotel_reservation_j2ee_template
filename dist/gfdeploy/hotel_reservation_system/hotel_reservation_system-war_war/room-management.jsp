@@ -72,6 +72,9 @@
                         <%
                         int totalRecordCount = rsb.getTotalCount();
                         int totalPageCount = totalRecordCount / 10 + 1;
+                        if (totalRecordCount % 10 == 0) {
+                            totalPageCount -= 1;
+                        }
                         for (int i = 0; i < totalPageCount; i++) {
                             if (pageIndex == i + 1) {
                                 %> <li class='active'><a><%= i + 1 %><span class='sr-only'>(current)</span></a></li> <%

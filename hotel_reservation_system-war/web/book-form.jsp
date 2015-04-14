@@ -1,4 +1,5 @@
                             <form role="form" class="wowload fadeInRight">
+                                <input type='hidden' value='<%= request.getParameter("rid") %>' />
                                 <div class="form-group">
                                     <input type="text" class="form-control"  placeholder="Name">
                                 </div>

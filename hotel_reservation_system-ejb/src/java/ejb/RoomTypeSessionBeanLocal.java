@@ -22,7 +22,7 @@ public interface RoomTypeSessionBeanLocal {
     
     public int getTotalCount();
     
-    public Boolean createObject(Object obj);
+    public Object createObject(Object obj);
     
     public Boolean saveChange(Object obj);
     
@@ -31,4 +31,6 @@ public interface RoomTypeSessionBeanLocal {
     List getAmenities(int rid);
 
     Boolean saveAmenities(int rid, String[] amenitieIDs);
+
+    Boolean isAvailable(int rid);
 }

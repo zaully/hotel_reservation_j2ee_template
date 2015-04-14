@@ -5,10 +5,13 @@
  */
 package ejb;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -49,11 +52,11 @@ public class RoomTypeSessionBean implements RoomTypeSessionBeanRemote, RoomTypeS
     }
 
     @Override
-    public Boolean createObject(Object obj) {
+    public Object createObject(Object obj) {
         em.persist(obj);
         em.flush();
         if(((RoomType)obj).getRoomTypeId()> 0) {
-            return true;
+            return obj;
         }
         return false;
     }
@@ -102,5 +105,26 @@ public class RoomTypeSessionBean implements RoomTypeSessionBeanRemote, RoomTypeS
         }
         em.flush();
         return true;
+    }
+
+    @Override
+    public Boolean isAvailable(int rid) {
+        Calendar cldstart = Calendar.getInstance();
+        Date start =  cldstart.getTime();
+        Calendar cldend = Calendar.getInstance();
+        cldend.add(Calendar.DAY_OF_YEAR, 2);
+        Date end =  cldend.getTime();
+        List reservations = em.createQuery("SELECT r.roomsQuantity FROM Reservation r WHERE r.roomTypeId = :roomTypeId and r.startsFrom <= :endsAt and r.endsAt >= :startsFrom").setParameter("roomTypeId", rid).setParameter("endsAt", end, TemporalType.DATE).setParameter("startsFrom", start, TemporalType.DATE).getResultList();
+        int count = 0;
+        for (Object i : reservations) {
+            count += (int)i;
+        }
+        //int count = ((Long)em.createQuery("SELECT r.roomsQuantity FROM Reservation r WHERE r.roomTypeId = :roomTypeId and r.startsFrom <= :endsAt and r.endsAt >= :startsFrom").setParameter("roomTypeId", rid).setParameter("endsAt", end, TemporalType.DATE).setParameter("startsFrom", start, TemporalType.DATE).getSingleResult()).intValue();
+        RoomType room = (RoomType)em.find(RoomType.class, rid);
+        if (room.getQuantity() - count > 0) {
+            return true;
+        }
+        //int count = ((Long)em.createQuery("SELECT COUNT(r) FROM Reservation r WHERE r.roomTypeId = :roomTypeId and r.startsFrom <= :endsAt and r.endsAt >= :startsFrom").setParameter("roomTypeId", rid).setParameter("endsAt", end, TemporalType.DATE).setParameter("startsFrom", start, TemporalType.DATE).getFirstResult()).intValue();
+        return false;
     }
 }

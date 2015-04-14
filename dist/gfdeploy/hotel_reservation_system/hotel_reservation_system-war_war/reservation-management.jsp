@@ -84,7 +84,7 @@
                             <th></th>
                         </tr>
                         <%
-                            List objs = rsb.getAllReservation(50, 50 * (pageIndex - 1), from_date, to_date);
+                            List objs = rsb.getAllReservation(10, 10 * (pageIndex - 1), from_date, to_date);
                             for (Object obj : objs) {
                                 Reservation reservation = (Reservation)obj;
                                 User bookedUser = (User)ub.getUserByUID(reservation.getUserId());
@@ -110,6 +110,9 @@
                             <%
                             int totalRecordCount = rsb.getTotalCount(from_date, to_date);
                             int totalPageCount = totalRecordCount / 10 + 1;
+                            if (totalRecordCount % 10 == 0) {
+                                totalPageCount -= 1;
+                            }
                             for (int i = 0; i < totalPageCount; i++) {
                                 if (pageIndex == i + 1) {
                                     %> <li class='active'><a><%= i + 1 %><span class='sr-only'>(current)</span></a></li> <%

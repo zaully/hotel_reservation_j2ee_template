@@ -26,14 +26,14 @@
             create = true;
             room = new RoomType();
         }
-        if (request.getParameter("input_room_type") != null) {
+        if (request.getParameter("input_room_type") != null && request.getParameter("input_room_type").length() > 0) {
             room.setRoomTypeName(request.getParameter("input_room_type"));
-        } else if (create) {
-            room.setRoomTypeName("");
+        } else {
+            room.setRoomTypeName("NoNamed");
         }
         if (request.getParameter("input_normal_price") != null) {
             try {
-                BigDecimal bd = new BigDecimal(Double.parseDouble(request.getParameter("input_normal_price")));
+                BigDecimal bd = new BigDecimal(request.getParameter("input_normal_price"));
                 room.setRoomPrice(bd);
             } catch (Exception e) {
                 room.setRoomPrice(new BigDecimal(0));
@@ -43,7 +43,7 @@
         }
         if (request.getParameter("input_sq_ft") != null) {
             try {
-                BigDecimal bd = new BigDecimal(Double.parseDouble(request.getParameter("input_sq_ft")));
+                BigDecimal bd = new BigDecimal(request.getParameter("input_sq_ft"));
                 room.setRoomSize(bd);
             } catch (Exception e) {
                 room.setRoomSize(new BigDecimal(0));
@@ -60,10 +60,10 @@
         } else if (create) {
             room.setQuantity(0);
         }
-        if (request.getParameter("input_room_description") != null) {
+        if (request.getParameter("input_room_description") != null && request.getParameter("input_room_description").length() > 0) {
             room.setRoomDescription(request.getParameter("input_room_description"));
-        } else if (create) {
-            room.setRoomDescription("");
+        } else {
+            room.setRoomDescription("No Description");
         }
 //        if (request.getParameterValues("input_amenities") != null) {
 //            room.setRoomDescription(request.getParameterValues("input_amenities")[0]);
@@ -71,18 +71,21 @@
         room.setActivated(request.getParameter("activated_field") != null);
         Boolean result = false;
         if (create) {
-            result = rsb.createObject(room);
+            room = (RoomType) rsb.createObject(room);
+            if (room != null) {
+                result = true;
+            }
         } else {
             result = rsb.saveChange(room);
         }
-        if (result && request.getParameterValues("input_amenities") != null) {
+        if (result && request.getParameterValues("input_amenities") != null && room.getRoomTypeId() != null) {
             String[] selectedOptions = request.getParameterValues("input_amenities");
             if (selectedOptions.length == 0 || selectedOptions[0].compareToIgnoreCase("-1") == 0) {
                 rsb.saveAmenities(room.getRoomTypeId(), new String[0]);
             } else {
                 rsb.saveAmenities(room.getRoomTypeId(), selectedOptions);
             }
-        } else if (create) {
+        } else if (create && room.getRoomTypeId() != null) {
             rsb.saveAmenities(room.getRoomTypeId(), new String[0]);
         }
         if (result) {

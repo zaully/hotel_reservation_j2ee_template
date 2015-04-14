@@ -5,8 +5,6 @@
  */
 package ejb;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -107,6 +105,47 @@ public class ReservationSessionBean implements ReservationSessionBeanRemote, Res
     }
     
     @Override
+    public List getAllReservation(int uid, int rid, int count, int skip, Date start, Date end) {
+        if (count <= 0) {
+            count = 50;
+        }
+        if (skip < 0) {
+            skip = 0;
+        }
+        if (start == null) {
+            Calendar cld = Calendar.getInstance();
+            cld.add(Calendar.YEAR, -1);
+            start =  cld.getTime();
+        }
+        if (end == null) {
+            Calendar cld = Calendar.getInstance();
+            cld.add(Calendar.YEAR, 2);
+            end =  cld.getTime();
+        }
+        if (uid == 0 && rid == 0) {
+            return this.getAllReservation(count, skip, start, end);
+        } else if (rid == 0) {
+            return em.createQuery("SELECT r FROM Reservation r WHERE r.userId = :userId and r.startsFrom <= :endsAt and r.endsAt >= :startsFrom ORDER BY r.startsFrom DESC")
+                        .setParameter("userId", uid)
+                        .setParameter("endsAt", end, TemporalType.DATE)
+                        .setParameter("startsFrom", start, TemporalType.DATE)
+                        .setMaxResults(count).setFirstResult(skip).getResultList();
+        } else if (uid == 0) {
+            return em.createQuery("SELECT r FROM Reservation r WHERE r.roomTypeId = :roomTypeId and r.startsFrom <= :endsAt and r.endsAt >= :startsFrom ORDER BY r.startsFrom DESC")
+                        .setParameter("roomTypeId", rid)
+                        .setParameter("endsAt", end, TemporalType.DATE)
+                        .setParameter("startsFrom", start, TemporalType.DATE)
+                        .setMaxResults(count).setFirstResult(skip).getResultList();
+        }
+        return em.createQuery("SELECT r FROM Reservation r WHERE r.roomTypeId = :roomTypeId and r.userId = :userId and r.startsFrom <= :endsAt and r.endsAt >= :startsFrom ORDER BY r.startsFrom DESC")
+                    .setParameter("roomTypeId", rid)
+                    .setParameter("userId", uid)
+                    .setParameter("endsAt", end, TemporalType.DATE)
+                    .setParameter("startsFrom", start, TemporalType.DATE)
+                    .setMaxResults(count).setFirstResult(skip).getResultList();
+    }
+    
+    @Override
     public int getTotalCount(Date start, Date end) {
         if (start == null) {
             Calendar cld = Calendar.getInstance();
@@ -141,5 +180,27 @@ public class ReservationSessionBean implements ReservationSessionBeanRemote, Res
         int count = ((Long)em.createQuery("SELECT COUNT(r) FROM Reservation r WHERE r.userId = :userId and r.startsFrom <= :endsAt").setParameter("userId", uid).setParameter("endsAt", Calendar.getInstance().getTime()).getSingleResult()).intValue();
         return count;
     }
-    
+
+    @Override
+    public Boolean reserve(int rid, int uid, Date from, Date to, int quantity, String additional_message) {
+        RoomType room = em.find(RoomType.class, rid);
+        List reservations = this.getAllReservation(0, rid, 100, 0, from, to);
+        if (room.getQuantity() - reservations.size() < quantity) {
+            return false;
+        }
+        List userReservations = this.getAllReservation(uid, 0, 100, 0, from, to);
+        if (userReservations.size() > 0) {
+            return false;
+        }
+        Reservation res = new Reservation();
+        res.setUserId(uid);
+        res.setRoomTypeId(rid);
+        res.setStartsFrom(from);
+        res.setEndsAt(to);
+        res.setAdditionalMessage(additional_message);
+        res.setRoomsQuantity(quantity);
+        em.persist(res);
+        em.flush();
+        return true;
+    }
 }
