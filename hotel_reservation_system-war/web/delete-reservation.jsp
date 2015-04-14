@@ -16,5 +16,9 @@
         %> <jsp:forward page="index.jsp" /> <%
     }
     reservationsb.deleteObject(reservation.getReservationId());
+    if (user.getUserRoleId() == 1) {
+        %> <jsp:forward page="reservation-management.jsp" /> <%
+    } else {
+        %> <jsp:forward page="profile.jsp" /> <%
+    }
 %>
-<jsp:forward page="reservation-management.jsp" />
