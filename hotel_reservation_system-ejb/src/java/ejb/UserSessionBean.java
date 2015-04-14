@@ -27,9 +27,8 @@ public class UserSessionBean implements UserSessionBeanRemote, UserSessionBeanLo
 
     @Override
     public Boolean login(String email, String password) {
-        List users = em.createNamedQuery("User.findByEmail").setParameter("email", email).getResultList();
-        if (users.size() > 0) {
-            User user = (User) users.get(0);
+        try {
+            User user = (User)em.createNamedQuery("User.findByEmail").setParameter("email", email).getSingleResult();
             if (user != null) {
                 String strPw = UserSessionBean.hashedPassword(password);
                 if (strPw.compareTo(user.getPassword()) == 0) {
@@ -37,6 +36,7 @@ public class UserSessionBean implements UserSessionBeanRemote, UserSessionBeanLo
                     return true;
                 }
             }
+        } catch (Exception e) {
         }
         loggedUser = null;
         return false;

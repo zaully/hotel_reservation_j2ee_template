@@ -104,7 +104,7 @@
                             <th></th>
                         </tr>
                         <%
-                            List objs = rsb.getAllReservation(10, 10 * (pageIndex - 1), dtFrom, null);
+                            List objs = rsb.getAllReservation(user.getUserId(), 0, 10, 10 * (pageIndex - 1), dtFrom, null);
                             for (Object obj : objs) {
                                 Reservation reservation = (Reservation)obj;
                                 RoomType rt = (RoomType)roomsb.getRoomTypeDetails(reservation.getRoomTypeId());
